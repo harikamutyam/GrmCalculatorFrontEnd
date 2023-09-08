@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Harika GRM Calculator</title>
+  <script>
+    function calculateSum() {
+      // Get the input values
+      var num1 = parseFloat(document.getElementById("num1").value);
+      var num2 = parseFloat(document.getElementById("num2").value);
+
+      // Calculate the grm
+      var grm = Math.round(num1/(12*num2));
+
+      // Display the result
+      document.getElementById("result").innerHTML = "The GRM is: " + grm;
+    }
+     function invokeLambda() {
+      // Lambda function URL
+      var lambdaUrl = "https://rrrwpv3weejpx5okjw6oaozjlm0rcdfe.lambda-url.us-west-1.on.aws";
+
+      var num1 = parseFloat(document.getElementById("num1").value);
+      var num2 = parseFloat(document.getElementById("num2").value);
+
+      // Request payload
+      var payload = {
+        "n1" : num1,
+        "n2" : num2
+      };
+
+      // Invoke Lambda function
+      fetch(lambdaUrl, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the Lambda function response
+        console.log(data);
+        // Perform any necessary actions with the response
+
+        document.getElementById("result").innerHTML = "The GRM is: " + data["grm"];
+
+      })
+      .catch(error => {
+        // Handle any errors that occur during the request
+        console.error('Error:', error);
+      });
+    }
+  </script>
+</head>
+<body>
+  <h1>Harika GRM Calculator</h1>
+  <label for="num1">Property Value:</label>
+  <input type="number" id="num1" /><br />
+  <label for="num2">Monthly Rent:</label>
+  <input type="number" id="num2" /><br />
+  <button onclick="invokeLambda()">Calculate GRM</button>
+  <p id="result"></p>
+</body>
+</html>
